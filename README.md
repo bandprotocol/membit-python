@@ -1,11 +1,10 @@
 # Membit Python Client
 
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/membit-python)](https://pypi.org/project/membit-python/)
-[![License](https://img.shields.io/github/license/your-org/membit-python)](https://github.com/your-org/membit-python/blob/main/LICENSE)
 
-The Membit Python client allows for easy interaction with the Membit API, offering powerful social media analytics and monitoring capabilities directly from your Python programs. Easily integrate trending discussion discovery, cluster analysis, and social post search into your applications.
+The Membit Python client provides powerful social media analytics and monitoring capabilities for your Python applications. Easily integrate trending discussion discovery, cluster analysis, and social post search with a simple and intuitive API.
 
-## Installing
+## Installation
 
 ```bash
 pip install membit-python
@@ -17,135 +16,159 @@ Or with uv:
 uv add membit-python
 ```
 
-## Getting Started
+## Quick Start
 
-To use the Membit API, you'll need an API key. You can set it as an environment variable:
+### 1. Get Your API Key
+
+First, obtain your API key from Membit and set it as an environment variable:
 
 ```bash
 export MEMBIT_API_KEY="your_api_key_here"
 ```
 
-Or pass it directly when creating a client instance.
+### 2. Basic Usage
 
-# Trending Discussion Clusters
+```python
+from membit import MembitClient
+
+# Initialize the client (uses MEMBIT_API_KEY environment variable)
+client = MembitClient()
+
+# Search for trending discussion clusters
+clusters = client.cluster_search(q="artificial intelligence", limit=5)
+print(clusters)
+```
+
+## Features
+
+### 🔥 Trending Discussion Clusters
 
 Find and analyze trending discussions across social platforms with intelligent clustering.
 
-## Usage
+### 🔍 Deep Cluster Analysis
 
-Below are some code snippets that show you how to interact with our API. The different steps and components of this code are explained in more detail in the API Methods section further down.
+Dive deeper into specific discussions to understand context and participants.
+
+### 📱 Social Post Search
+
+Search for individual social media posts on specific topics.
+
+### ⚡ Async Support
+
+Full async/await support for high-performance applications.
+
+### 📊 Multiple Response Formats
+
+Get data in JSON format for applications or LLM-optimized text for AI workflows.
+
+## Usage Examples
 
 ### Finding Trending Discussion Clusters
 
 ```python
 from membit import MembitClient
 
-# Step 1. Instantiate your MembitClient
 client = MembitClient(api_key="your_api_key_here")
 
-# Step 2. Search for trending discussion clusters
-clusters = client.route_cluster_search(q="artificial intelligence", limit=5)
+# Search for trending clusters
+clusters = client.cluster_search(q="artificial intelligence", limit=5)
 
-# Step 3. That's it! You now have trending discussion clusters
-print(clusters)
+# clusters is a dict containing trending discussion clusters
+for cluster in clusters.get("clusters", []):
+    print(f"Cluster: {cluster['label']}")
 ```
-
-This will return clustered discussions around your search topic, helping you understand what people are talking about.
 
 ### Getting Detailed Cluster Information
 
 ```python
 from membit import MembitClient
 
-# Step 1. Instantiate your MembitClient
-client = MembitClient(api_key="your_api_key_here")
+client = MembitClient()
 
-# Step 2. First, find clusters
-clusters = client.route_cluster_search(q="climate change")
+# First, find clusters
+clusters = client.cluster_search(q="climate change")
 
-# Step 3. Get detailed info about the first cluster
-cluster_label = clusters["clusters"][0]["label"]
-cluster_details = client.route_cluster_info(label=cluster_label, limit=10)
-
-# Step 4. Now you have detailed context about this specific discussion
-print(cluster_details)
+# Get detailed info about the first cluster
+if clusters.get("clusters"):
+    cluster_label = clusters["clusters"][0]["label"]
+    cluster_details = client.cluster_info(label=cluster_label, limit=10)
+    print(cluster_details)
 ```
-
-This gives you deeper insights into a specific trending discussion cluster.
 
 ### Searching for Individual Posts
 
 ```python
 from membit import MembitClient
 
-# Step 1. Instantiate your MembitClient
-client = MembitClient(api_key="your_api_key_here")
+client = MembitClient()
 
-# Step 2. Search for specific social posts
+# Search for specific social posts
 posts = client.post_search(q="machine learning breakthrough", limit=20)
 
-# Step 3. Access individual social media posts
+# Access individual social media posts
 for post in posts.get("posts", []):
     print(f"Post: {post}")
 ```
 
-Perfect for when you need to find specific posts rather than trending discussions.
+### Using Different Response Formats
+
+```python
+from membit import MembitClient
+
+client = MembitClient()
+
+# Get JSON response (default)
+json_response = client.cluster_search(q="space exploration", format="json")
+# Returns: dict with structured data
+
+# Get LLM-optimized text response
+llm_response = client.cluster_search(q="space exploration", format="llm")
+# Returns: str with formatted text optimized for AI processing
+```
 
 ## Async Support
 
-The Membit client also supports asynchronous operations for better performance in async applications:
-
-### Async Trending Clusters
+For applications that need high performance or handle multiple concurrent requests:
 
 ```python
 import asyncio
 from membit import AsyncMembitClient
 
-async def main():
-    # Step 1. Instantiate your AsyncMembitClient
+async def analyze_topics():
     client = AsyncMembitClient(api_key="your_api_key_here")
 
-    # Step 2. Search for trending clusters asynchronously
-    clusters = await client.route_cluster_search(q="tech news", limit=5)
+    # Search for trending clusters asynchronously
+    clusters = await client.cluster_search(q="tech news", limit=5)
 
-    # Step 3. Get cluster details
+    # Get detailed info for multiple clusters concurrently
     if clusters.get("clusters"):
-        cluster_info = await client.route_cluster_info(
-            label=clusters["clusters"][0]["label"]
-        )
-        print(cluster_info)
+        tasks = [
+            client.cluster_info(label=cluster["label"])
+            for cluster in clusters["clusters"][:3]
+        ]
+        cluster_details = await asyncio.gather(*tasks)
+
+        for details in cluster_details:
+            print(details)
 
 # Run the async function
-asyncio.run(main())
+asyncio.run(analyze_topics())
 ```
 
-## Response Formats
+## API Reference
 
-The Membit API supports different response formats to suit your needs:
+### `MembitClient(api_key=None, api_url=None)`
 
-### JSON Format (Default)
+Initialize the Membit client.
 
-```python
-from membit import MembitClient
+**Parameters:**
 
-client = MembitClient()
-response = client.route_cluster_search(q="space exploration", format="json")
-# Returns structured JSON data
-```
+- `api_key` (str, optional): Your Membit API key. If not provided, uses `MEMBIT_API_KEY` environment variable.
+- `api_url` (str, optional): Custom API URL. Uses default Membit API URL if not provided.
 
-### LLM-Optimized Format
+---
 
-```python
-from membit import MembitClient
-
-client = MembitClient()
-response = client.route_cluster_search(q="space exploration", format="llm")
-# Returns LLM-friendly formatted text
-```
-
-## API Methods
-
-### `route_cluster_search(q, limit=10, format="json", timeout=60)`
+### `cluster_search(q, limit=10, format="json", timeout=60)`
 
 Get trending discussions across social platforms. Useful for finding topics of interest and understanding live conversations.
 
@@ -153,40 +176,53 @@ Get trending discussions across social platforms. Useful for finding topics of i
 
 - `q` (str): Search query string
 - `limit` (int, optional): Maximum number of results to return (default: 10)
-- `format` (str, optional): Response format - "json" or "llm" (default: "json")
+- `format` (str, optional): Response format - `"json"` or `"llm"` (default: `"json"`)
 - `timeout` (int, optional): Request timeout in seconds (default: 60, max: 120)
 
-**Returns:** dict containing trending discussion clusters
+**Returns:**
 
-### `route_cluster_info(label, limit=10, format="json", timeout=60)`
+- `dict`: Trending discussion clusters (when `format="json"`)
+- `str`: Formatted text response (when `format="llm"`)
+
+---
+
+### `cluster_info(label, limit=10, format="json", timeout=60)`
 
 Dive deeper into a specific trending discussion cluster. Useful for understanding the context and participants of a particular conversation.
 
 **Parameters:**
 
-- `label` (str): Cluster label obtained from `route_cluster_search`
+- `label` (str): Cluster label obtained from `cluster_search`
 - `limit` (int, optional): Maximum number of results to return (default: 10)
-- `format` (str, optional): Response format - "json" or "llm" (default: "json")
+- `format` (str, optional): Response format - `"json"` or `"llm"` (default: `"json"`)
 - `timeout` (int, optional): Request timeout in seconds (default: 60, max: 120)
 
-**Returns:** dict containing detailed cluster information
+**Returns:**
+
+- `dict`: Detailed cluster information (when `format="json"`)
+- `str`: Formatted text response (when `format="llm"`)
+
+---
 
 ### `post_search(q, limit=10, format="json", timeout=60)`
 
-Search for raw social posts. Useful when you need to find specific posts.
+Search for raw social posts. Useful when you need to find specific posts (not recommended for finding trending discussions).
 
 **Parameters:**
 
 - `q` (str): Search query string
 - `limit` (int, optional): Maximum number of results to return (default: 10)
-- `format` (str, optional): Response format - "json" or "llm" (default: "json")
+- `format` (str, optional): Response format - `"json"` or `"llm"` (default: `"json"`)
 - `timeout` (int, optional): Request timeout in seconds (default: 60, max: 120)
 
-**Returns:** dict containing raw social posts
+**Returns:**
+
+- `dict`: Raw social posts (when `format="json"`)
+- `str`: Formatted text response (when `format="llm"`)
 
 ## Error Handling
 
-The client includes proper error handling:
+The client includes comprehensive error handling:
 
 ```python
 from membit import MembitClient, MissingAPIKeyError
@@ -194,34 +230,62 @@ from membit import MembitClient, MissingAPIKeyError
 try:
     # This will raise MissingAPIKeyError if no API key is provided
     client = MembitClient()
-    result = client.route_cluster_search("python programming")
+    result = client.cluster_search("python programming")
+
 except MissingAPIKeyError:
     print("Please provide a valid API key")
+
 except TimeoutError:
     print("Request timed out")
+
 except Exception as e:
     print(f"An error occurred: {e}")
 ```
 
 ## Requirements
 
-- Python >=3.12,<3.13
-- requests>=2.25.0 (for sync client)
-- httpx>=0.28.1 (for async client)
+- **Python:** >=3.12,<3.13
+- **Dependencies:**
+  - `requests>=2.25.0` (for synchronous client)
+  - `httpx>=0.28.1` (for asynchronous client)
 
 ## Examples
 
-Check out the `examples/` directory for complete working examples:
+Complete working examples are available in the `examples/` directory:
 
-- `examples/client.py` - Synchronous client usage
-- `examples/async_client.py` - Asynchronous client usage
+- [`examples/client.py`](examples/client.py) - Synchronous client usage
+- [`examples/async_client.py`](examples/async_client.py) - Asynchronous client usage
 
-To run the examples:
+### Running Examples
 
 ```bash
+# Set your API key
 export MEMBIT_API_KEY="your_api_key_here"
+
+# Install dependencies
 uv sync
+
+# Run synchronous example
 uv run examples/client.py
+
+# Run asynchronous example
+uv run examples/async_client.py
+```
+
+## Development
+
+### Installing for Development
+
+```bash
+git clone <repository-url>
+cd membit-python
+uv sync
+```
+
+### Running Tests
+
+```bash
+uv run pytest
 ```
 
 ## Contributing
@@ -230,8 +294,8 @@ We welcome contributions! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the terms of the MIT license.
+This project is licensed under the MIT License.
 
-## Contact
+## Support
 
 For support or questions about the Membit Python client, please reach out to our support team.

@@ -11,28 +11,28 @@ Set your MEMBIT_API_KEY environment variable:
 from membit import MembitClient
 
 
+def print_section(title: str):
+    """Print a formatted section header."""
+    print(f"\n{'=' * 50}")
+    print(f"  {title}")
+    print(f"{'=' * 50}")
+
+
 def main():
     # Initialize client
     client = MembitClient()
 
-    # Search for trending clusters
-    print("Searching for trending clusters... ")
-    clusters = client.route_cluster_search(q="artificial intelligence", limit=3)
-    print("Clusters:", clusters)
+    print_section("Searching for Trending Clusters")
+    clusters = client.cluster_search(q="artificial intelligence", limit=3)
+    print("Result:", clusters)
 
-    print("--------------------------------")
-
-    # Get cluster info
-    print("Getting cluster info... ", clusters["clusters"][0]["label"])
-    cluster_info = client.route_cluster_info(
-        label=clusters["clusters"][0]["label"], limit=3
-    )
+    print_section("Getting Cluster Details")
+    label = clusters["clusters"][0]["label"]
+    print(f"Fetching details for cluster: {label}")
+    cluster_info = client.cluster_info(label=label, limit=3)
     print("Cluster info:", cluster_info)
 
-    print("--------------------------------")
-
-    # Search for posts
-    print("Searching for posts... ")
+    print_section("Searching for Individual Posts")
     posts = client.post_search(q="artificial intelligence", limit=3)
     print("Posts:", posts)
 

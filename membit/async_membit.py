@@ -1,5 +1,5 @@
 import os
-from typing import Optional, Literal
+from typing import Optional, Literal, overload
 
 import httpx
 
@@ -35,13 +35,42 @@ class AsyncMembitClient:
             headers=self.headers,
         )
 
-    async def route_cluster_search(
+    def _parse_response(self, response: httpx.Response) -> dict | str:
+        """Parse response based on content type."""
+        if response.status_code == 200:
+            content_type = response.headers.get("content-type", "").lower()
+            if "application/json" in content_type:
+                return response.json()
+            elif "text/plain" in content_type:
+                return response.text
+
+        response.raise_for_status()
+
+    @overload
+    async def cluster_search(
+        self,
+        q: str,
+        limit: int = 10,
+        format: Literal["json"] = "json",
+        timeout: int = 60,
+    ) -> dict: ...
+
+    @overload
+    async def cluster_search(
+        self,
+        q: str,
+        limit: int = 10,
+        format: Literal["llm"] = "llm",
+        timeout: int = 60,
+    ) -> str: ...
+
+    async def cluster_search(
         self,
         q: str,
         limit: int = 10,
         format: Literal["json", "llm"] = "json",
         timeout: int = 60,
-    ) -> dict:
+    ) -> dict | str:
         """
         Get trending discussions across social platforms: useful for finding topics of interest and understanding live conversations.
 
@@ -52,7 +81,8 @@ class AsyncMembitClient:
             timeout: Request timeout in seconds (default: 60, max: 120)
 
         Returns:
-            dict: Search results containing trending discussion clusters
+            dict: Search results containing trending discussion clusters (when format="json")
+            str: Formatted text response (when format="llm")
         """
         timeout = min(timeout, 120)
         data = {"q": q, "limit": limit, "format": format}
@@ -65,18 +95,33 @@ class AsyncMembitClient:
             except httpx.TimeoutException:
                 raise TimeoutError(timeout)
 
-            if response.status_code == 200:
-                return response.json()
+            return self._parse_response(response)
 
-            raise response.raise_for_status()
+    @overload
+    async def cluster_info(
+        self,
+        label: str,
+        limit: int = 10,
+        format: Literal["json"] = "json",
+        timeout: int = 60,
+    ) -> dict: ...
 
-    async def route_cluster_info(
+    @overload
+    async def cluster_info(
+        self,
+        label: str,
+        limit: int = 10,
+        format: Literal["llm"] = "llm",
+        timeout: int = 60,
+    ) -> str: ...
+
+    async def cluster_info(
         self,
         label: str,
         limit: int = 10,
         format: Literal["json", "llm"] = "json",
         timeout: int = 60,
-    ) -> dict:
+    ) -> dict | str:
         """
         Dive deeper into a specific trending discussion cluster: useful for understanding the context and participants of a particular conversation (requires a cluster label from `clusters_search`).
 
@@ -87,7 +132,8 @@ class AsyncMembitClient:
             timeout: Request timeout in seconds (default: 60, max: 120)
 
         Returns:
-            dict: Detailed information about the specific cluster
+            dict: Detailed information about the specific cluster (when format="json")
+            str: Formatted text response (when format="llm")
         """
         timeout = min(timeout, 120)
 
@@ -101,10 +147,25 @@ class AsyncMembitClient:
             except httpx.TimeoutException:
                 raise TimeoutError(timeout)
 
-            if response.status_code == 200:
-                return response.json()
+            return self._parse_response(response)
 
-            response.raise_for_status()
+    @overload
+    async def post_search(
+        self,
+        q: str,
+        limit: int = 10,
+        format: Literal["json"] = "json",
+        timeout: int = 60,
+    ) -> dict: ...
+
+    @overload
+    async def post_search(
+        self,
+        q: str,
+        limit: int = 10,
+        format: Literal["llm"] = "llm",
+        timeout: int = 60,
+    ) -> str: ...
 
     async def post_search(
         self,
@@ -112,7 +173,7 @@ class AsyncMembitClient:
         limit: int = 10,
         format: Literal["json", "llm"] = "json",
         timeout: int = 60,
-    ) -> dict:
+    ) -> dict | str:
         """
         Search for raw social posts: useful when you need to find specific posts (not recommended for finding trending discussions).
 
@@ -123,7 +184,8 @@ class AsyncMembitClient:
             timeout: Request timeout in seconds (default: 60, max: 120)
 
         Returns:
-            dict: Search results containing raw social posts
+            dict: Search results containing raw social posts (when format="json")
+            str: Formatted text response (when format="llm")
         """
         timeout = min(timeout, 120)
 
@@ -137,7 +199,4 @@ class AsyncMembitClient:
             except httpx.TimeoutException:
                 raise TimeoutError(timeout)
 
-            if response.status_code == 200:
-                return response.json()
-
-            raise response.raise_for_status()
+            return self._parse_response(response)

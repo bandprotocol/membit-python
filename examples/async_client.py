@@ -11,30 +11,29 @@ Set your MEMBIT_API_KEY environment variable:
 from membit import AsyncMembitClient
 
 
+def print_section(title: str):
+    """Print a formatted section header."""
+    print(f"\n{'=' * 50}")
+    print(f"  {title}")
+    print(f"{'=' * 50}")
+
+
 async def main():
-    # Initialize client
     client = AsyncMembitClient()
 
-    # Search for trending clusters
-    print("Searching for trending clusters... ")
-    clusters = await client.route_cluster_search(q="artificial intelligence", limit=3)
-    print("Clusters: ", clusters)
+    print_section("Searching for Trending Clusters (Async)")
+    clusters = await client.cluster_search(q="artificial intelligence", limit=3)
+    print("Result:", clusters)
 
-    print("--------------------------------")
+    print_section("Getting Cluster Details (Async)")
+    label = clusters["clusters"][0]["label"]
+    print(f"Fetching details for cluster: {label}")
+    cluster_info = await client.cluster_info(label=label, limit=3)
+    print("Cluster info:", cluster_info)
 
-    # Get cluster info
-    print("Getting cluster info... ", clusters["clusters"][0]["label"])
-    cluster_info = await client.route_cluster_info(
-        label=clusters["clusters"][0]["label"], limit=3
-    )
-    print("Cluster info: ", cluster_info)
-
-    print("--------------------------------")
-
-    # Search for posts
-    print("Searching for posts... ")
+    print_section("Searching for Individual Posts (Async)")
     posts = await client.post_search(q="artificial intelligence", limit=3)
-    print("Posts: ", posts)
+    print("Posts:", posts)
 
 
 if __name__ == "__main__":
