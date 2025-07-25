@@ -1,6 +1,7 @@
 # Membit Python Client
 
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/membit-python)](https://pypi.org/project/membit-python/)
+[![License](https://img.shields.io/github/license/bandprotocol/membit-python)](https://github.com/bandprotocol/membit-python/blob/main/LICENSE)
 
 The Membit Python client provides powerful social media analytics and monitoring capabilities for your Python applications. Easily integrate trending discussion discovery, cluster analysis, and social post search with a simple and intuitive API.
 
