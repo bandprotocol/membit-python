@@ -1,5 +1,5 @@
 import os
-from typing import Optional, Literal, overload
+from typing import Literal, overload
 
 import httpx
 
@@ -17,7 +17,7 @@ class AsyncMembitClient:
     - posts_search: Search for raw social posts
     """
 
-    def __init__(self, api_key: Optional[str] = None, api_url: Optional[str] = None):
+    def __init__(self, api_key: str | None = None, api_url: str | None = None):
         if api_key is None:
             api_key = os.getenv("MEMBIT_API_KEY")
 
@@ -39,10 +39,13 @@ class AsyncMembitClient:
         """Parse response based on content type."""
         if response.status_code == 200:
             content_type = response.headers.get("content-type", "").lower()
-            if "application/json" in content_type:
-                return response.json()
-            elif "text/plain" in content_type:
-                return response.text
+            match content_type:
+                case ct if "application/json" in ct:
+                    return response.json()
+                case ct if "text/plain" in ct:
+                    return response.text
+                case _:
+                    raise RuntimeError(f"Unknown content type: {content_type}")
 
         response.raise_for_status()
 
@@ -83,8 +86,13 @@ class AsyncMembitClient:
         Returns:
             dict: Search results containing trending discussion clusters (when format="json")
             str: Formatted text response (when format="llm")
+
+        Raises:
+            ValueError: If timeout exceeds 120 seconds
         """
-        timeout = min(timeout, 120)
+        if timeout > 120:
+            raise ValueError("Timeout cannot exceed 120 seconds")
+
         data = {"q": q, "limit": limit, "format": format}
 
         async with self._client_creator() as client:
@@ -134,8 +142,12 @@ class AsyncMembitClient:
         Returns:
             dict: Detailed information about the specific cluster (when format="json")
             str: Formatted text response (when format="llm")
+
+        Raises:
+            ValueError: If timeout exceeds 120 seconds
         """
-        timeout = min(timeout, 120)
+        if timeout > 120:
+            raise ValueError("Timeout cannot exceed 120 seconds")
 
         data = {"label": label, "limit": limit, "format": format}
 
@@ -186,8 +198,12 @@ class AsyncMembitClient:
         Returns:
             dict: Search results containing raw social posts (when format="json")
             str: Formatted text response (when format="llm")
+
+        Raises:
+            ValueError: If timeout exceeds 120 seconds
         """
-        timeout = min(timeout, 120)
+        if timeout > 120:
+            raise ValueError("Timeout cannot exceed 120 seconds")
 
         data = {"q": q, "limit": limit, "format": format}
 

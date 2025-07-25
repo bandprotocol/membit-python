@@ -1,5 +1,5 @@
 import os
-from typing import Optional, Literal, overload
+from typing import Literal, overload
 import requests
 
 from .errors import MissingAPIKeyError
@@ -11,7 +11,7 @@ class MembitClient:
     A client for the Membit API.
     """
 
-    def __init__(self, api_key: Optional[str] = None, api_url: Optional[str] = None):
+    def __init__(self, api_key: str | None = None, api_url: str | None = None):
         if api_key is None:
             api_key = os.getenv("MEMBIT_API_KEY")
 
@@ -29,10 +29,13 @@ class MembitClient:
         """Parse response based on content type."""
         if response.status_code == 200:
             content_type = response.headers.get("content-type", "").lower()
-            if "application/json" in content_type:
-                return response.json()
-            elif "text/plain" in content_type:
-                return response.text
+            match content_type:
+                case ct if "application/json" in ct:
+                    return response.json()
+                case ct if "text/plain" in ct:
+                    return response.text
+                case _:
+                    raise RuntimeError(f"Unknown content type: {content_type}")
 
         response.raise_for_status()
 
@@ -73,9 +76,12 @@ class MembitClient:
         Returns:
             dict: Search results containing trending discussion clusters (when format="json")
             str: Formatted text response (when format="llm")
-        """
 
-        timeout = min(timeout, 120)
+        Raises:
+            ValueError: If timeout exceeds 120 seconds
+        """
+        if timeout > 120:
+            raise ValueError("Timeout cannot exceed 120 seconds")
 
         data = {
             "q": q,
@@ -132,9 +138,12 @@ class MembitClient:
         Returns:
             dict: Cluster information (when format="json")
             str: Formatted text response (when format="llm")
-        """
 
-        timeout = min(timeout, 120)
+        Raises:
+            ValueError: If timeout exceeds 120 seconds
+        """
+        if timeout > 120:
+            raise ValueError("Timeout cannot exceed 120 seconds")
 
         data = {
             "label": label,
@@ -191,9 +200,12 @@ class MembitClient:
         Returns:
             dict: Search results containing raw social posts (when format="json")
             str: Formatted text response (when format="llm")
-        """
 
-        timeout = min(timeout, 120)
+        Raises:
+            ValueError: If timeout exceeds 120 seconds
+        """
+        if timeout > 120:
+            raise ValueError("Timeout cannot exceed 120 seconds")
 
         data = {
             "q": q,
