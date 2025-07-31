@@ -22,17 +22,17 @@ async def main():
     client = AsyncMembitClient()
 
     print_section("Searching for Trending Clusters (Async)")
-    clusters = await client.cluster_search(q="artificial intelligence", limit=3)
+    clusters = await client.cluster_search("artificial intelligence", limit=3)
     print("Result:", clusters)
 
     print_section("Getting Cluster Details (Async)")
     label = clusters["clusters"][0]["label"]
     print(f"Fetching details for cluster: {label}")
-    cluster_info = await client.cluster_info(label=label, limit=3)
+    cluster_info = await client.cluster_info(label, limit=3)
     print("Cluster info:", cluster_info)
 
     print_section("Searching for Individual Posts (Async)")
-    posts = await client.post_search(q="artificial intelligence", limit=3)
+    posts = await client.post_search("artificial intelligence", limit=3)
     print("Posts:", posts)
 
 

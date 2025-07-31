@@ -53,8 +53,9 @@ class AsyncMembitClient:
     async def cluster_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["json"] = "json",
+        output_format: Literal["json"] = "json",
         timeout: int = 60,
     ) -> dict: ...
 
@@ -62,16 +63,18 @@ class AsyncMembitClient:
     async def cluster_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["llm"] = "llm",
+        output_format: Literal["llm"] = "llm",
         timeout: int = 60,
     ) -> str: ...
 
     async def cluster_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["json", "llm"] = "json",
+        output_format: Literal["json", "llm"] = "json",
         timeout: int = 60,
     ) -> dict | str:
         """
@@ -80,7 +83,7 @@ class AsyncMembitClient:
         Args:
             q: Search query string
             limit: Maximum number of results to return (default: 10)
-            format: Response format - "json" or "llm" (default: "json")
+            output_format: Response format - "json" or "llm" (default: "json")
             timeout: Request timeout in seconds (default: 60, max: 120)
 
         Returns:
@@ -93,7 +96,7 @@ class AsyncMembitClient:
         if timeout > 120:
             raise ValueError("Timeout cannot exceed 120 seconds")
 
-        data = {"q": q, "limit": limit, "format": format}
+        data = {"q": q, "limit": limit, "format": output_format}
 
         async with self._client_creator() as client:
             try:
@@ -109,8 +112,9 @@ class AsyncMembitClient:
     async def cluster_info(
         self,
         label: str,
+        *,
         limit: int = 10,
-        format: Literal["json"] = "json",
+        output_format: Literal["json"] = "json",
         timeout: int = 60,
     ) -> dict: ...
 
@@ -118,16 +122,18 @@ class AsyncMembitClient:
     async def cluster_info(
         self,
         label: str,
+        *,
         limit: int = 10,
-        format: Literal["llm"] = "llm",
+        output_format: Literal["llm"] = "llm",
         timeout: int = 60,
     ) -> str: ...
 
     async def cluster_info(
         self,
         label: str,
+        *,
         limit: int = 10,
-        format: Literal["json", "llm"] = "json",
+        output_format: Literal["json", "llm"] = "json",
         timeout: int = 60,
     ) -> dict | str:
         """
@@ -136,7 +142,7 @@ class AsyncMembitClient:
         Args:
             label: Cluster label obtained from clusters_search
             limit: Maximum number of results to return (default: 10)
-            format: Response format - "json" or "llm" (default: "json")
+            output_format: Response format - "json" or "llm" (default: "json")
             timeout: Request timeout in seconds (default: 60, max: 120)
 
         Returns:
@@ -149,7 +155,7 @@ class AsyncMembitClient:
         if timeout > 120:
             raise ValueError("Timeout cannot exceed 120 seconds")
 
-        data = {"label": label, "limit": limit, "format": format}
+        data = {"label": label, "limit": limit, "format": output_format}
 
         async with self._client_creator() as client:
             try:
@@ -165,8 +171,9 @@ class AsyncMembitClient:
     async def post_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["json"] = "json",
+        output_format: Literal["json"] = "json",
         timeout: int = 60,
     ) -> dict: ...
 
@@ -174,16 +181,18 @@ class AsyncMembitClient:
     async def post_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["llm"] = "llm",
+        output_format: Literal["llm"] = "llm",
         timeout: int = 60,
     ) -> str: ...
 
     async def post_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["json", "llm"] = "json",
+        output_format: Literal["json", "llm"] = "json",
         timeout: int = 60,
     ) -> dict | str:
         """
@@ -192,7 +201,7 @@ class AsyncMembitClient:
         Args:
             q: Search query string
             limit: Maximum number of results to return (default: 10)
-            format: Response format - "json" or "llm" (default: "json")
+            output_format: Response format - "json" or "llm" (default: "json")
             timeout: Request timeout in seconds (default: 60, max: 120)
 
         Returns:
@@ -205,7 +214,7 @@ class AsyncMembitClient:
         if timeout > 120:
             raise ValueError("Timeout cannot exceed 120 seconds")
 
-        data = {"q": q, "limit": limit, "format": format}
+        data = {"q": q, "limit": limit, "format": output_format}
 
         async with self._client_creator() as client:
             try:

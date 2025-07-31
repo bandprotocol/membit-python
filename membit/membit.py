@@ -43,8 +43,9 @@ class MembitClient:
     def cluster_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["json"] = "json",
+        output_format: Literal["json"] = "json",
         timeout: int = 60,
     ) -> dict: ...
 
@@ -52,16 +53,18 @@ class MembitClient:
     def cluster_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["llm"] = "llm",
+        output_format: Literal["llm"] = "llm",
         timeout: int = 60,
     ) -> str: ...
 
     def cluster_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["json", "llm"] = "json",
+        output_format: Literal["json", "llm"] = "json",
         timeout: int = 60,
     ) -> dict | str:
         """
@@ -70,11 +73,11 @@ class MembitClient:
         Args:
             q: Search query string
             limit: Maximum number of results to return (default: 10)
-            format: Response format - "json" or "llm" (default: "json")
+            output_format: Response format - "json" or "llm" (default: "json")
             timeout: Request timeout in seconds (default: 60, max: 120)
 
         Returns:
-            dict: Search results containing trending discussion clusters (when format="json")
+            dict: Search results containing trending discussion clusters (when output_format="json")
             str: Formatted text response (when format="llm")
 
         Raises:
@@ -86,7 +89,7 @@ class MembitClient:
         data = {
             "q": q,
             "limit": limit,
-            "format": format,
+            "format": output_format,
         }
 
         try:
@@ -105,8 +108,9 @@ class MembitClient:
     def cluster_info(
         self,
         label: str,
+        *,
         limit: int = 10,
-        format: Literal["json"] = "json",
+        output_format: Literal["json"] = "json",
         timeout: int = 60,
     ) -> dict: ...
 
@@ -114,16 +118,18 @@ class MembitClient:
     def cluster_info(
         self,
         label: str,
+        *,
         limit: int = 10,
-        format: Literal["llm"] = "llm",
+        output_format: Literal["llm"] = "llm",
         timeout: int = 60,
     ) -> str: ...
 
     def cluster_info(
         self,
         label: str,
+        *,
         limit: int = 10,
-        format: Literal["json", "llm"] = "json",
+        output_format: Literal["json", "llm"] = "json",
         timeout: int = 60,
     ) -> dict | str:
         """
@@ -132,7 +138,7 @@ class MembitClient:
         Args:
             label: Cluster label obtained from clusters_search
             limit: Maximum number of results to return (default: 10)
-            format: Response format - "json" or "llm" (default: "json")
+            output_format: Response format - "json" or "llm" (default: "json")
             timeout: Request timeout in seconds (default: 60, max: 120)
 
         Returns:
@@ -148,7 +154,7 @@ class MembitClient:
         data = {
             "label": label,
             "limit": limit,
-            "format": format,
+            "format": output_format,
         }
 
         try:
@@ -167,8 +173,9 @@ class MembitClient:
     def post_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["json"] = "json",
+        output_format: Literal["json"] = "json",
         timeout: int = 60,
     ) -> dict: ...
 
@@ -176,16 +183,18 @@ class MembitClient:
     def post_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["llm"] = "llm",
+        output_format: Literal["llm"] = "llm",
         timeout: int = 60,
     ) -> str: ...
 
     def post_search(
         self,
         q: str,
+        *,
         limit: int = 10,
-        format: Literal["json", "llm"] = "json",
+        output_format: Literal["json", "llm"] = "json",
         timeout: int = 60,
     ) -> dict | str:
         """
@@ -194,7 +203,7 @@ class MembitClient:
         Args:
             q: Search query string
             limit: Maximum number of results to return (default: 10)
-            format: Response format - "json" or "llm" (default: "json")
+            output_format: Response format - "json" or "llm" (default: "json")
             timeout: Request timeout in seconds (default: 60, max: 120)
 
         Returns:
@@ -210,7 +219,7 @@ class MembitClient:
         data = {
             "q": q,
             "limit": limit,
-            "format": format,
+            "format": output_format,
         }
 
         try:

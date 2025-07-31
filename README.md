@@ -36,7 +36,7 @@ from membit import MembitClient
 client = MembitClient()
 
 # Search for trending discussion clusters
-clusters = client.cluster_search(q="artificial intelligence", limit=5)
+clusters = client.cluster_search("artificial intelligence", limit=5)
 print(clusters)
 ```
 
@@ -72,7 +72,7 @@ from membit import MembitClient
 client = MembitClient(api_key="your_api_key_here")
 
 # Search for trending clusters
-clusters = client.cluster_search(q="artificial intelligence", limit=5)
+clusters = client.cluster_search("artificial intelligence", limit=5)
 
 # clusters is a dict containing trending discussion clusters
 for cluster in clusters.get("clusters", []):
@@ -87,7 +87,7 @@ from membit import MembitClient
 client = MembitClient()
 
 # First, find clusters
-clusters = client.cluster_search(q="climate change")
+clusters = client.cluster_search("climate change")
 
 # Get detailed info about the first cluster
 if clusters.get("clusters"):
@@ -104,7 +104,7 @@ from membit import MembitClient
 client = MembitClient()
 
 # Search for specific social posts
-posts = client.post_search(q="machine learning breakthrough", limit=20)
+posts = client.post_search("machine learning breakthrough", limit=20)
 
 # Access individual social media posts
 for post in posts.get("posts", []):
@@ -119,11 +119,11 @@ from membit import MembitClient
 client = MembitClient()
 
 # Get JSON response (default)
-json_response = client.cluster_search(q="space exploration", format="json")
+json_response = client.cluster_search("space exploration", format="json")
 # Returns: dict with structured data
 
 # Get LLM-optimized text response
-llm_response = client.cluster_search(q="space exploration", format="llm")
+llm_response = client.cluster_search("space exploration", format="llm")
 # Returns: str with formatted text optimized for AI processing
 ```
 
@@ -139,7 +139,7 @@ async def analyze_topics():
     client = AsyncMembitClient(api_key="your_api_key_here")
 
     # Search for trending clusters asynchronously
-    clusters = await client.cluster_search(q="tech news", limit=5)
+    clusters = await client.cluster_search("tech news", limit=5)
 
     # Get detailed info for multiple clusters concurrently
     if clusters.get("clusters"):
@@ -245,7 +245,7 @@ except Exception as e:
 
 ## Requirements
 
-- **Python:** >=3.12,<3.13
+- **Python:** >=3.10
 - **Dependencies:**
   - `requests>=2.25.0` (for synchronous client)
   - `httpx>=0.28.1` (for asynchronous client)
