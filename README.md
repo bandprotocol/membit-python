@@ -119,11 +119,11 @@ from membit import MembitClient
 client = MembitClient()
 
 # Get JSON response (default)
-json_response = client.cluster_search("space exploration", format="json")
+json_response = client.cluster_search("space exploration", output_format="json")
 # Returns: dict with structured data
 
 # Get LLM-optimized text response
-llm_response = client.cluster_search("space exploration", format="llm")
+llm_response = client.cluster_search("space exploration", output_format="llm")
 # Returns: str with formatted text optimized for AI processing
 ```
 
@@ -169,7 +169,7 @@ Initialize the Membit client.
 
 ---
 
-### `cluster_search(q, limit=10, format="json", timeout=60)`
+### `cluster_search(q, limit=10, output_format="json", timeout=60)`
 
 Get trending discussions across social platforms. Useful for finding topics of interest and understanding live conversations.
 
@@ -177,17 +177,17 @@ Get trending discussions across social platforms. Useful for finding topics of i
 
 - `q` (str): Search query string
 - `limit` (int, optional): Maximum number of results to return (default: 10)
-- `format` (str, optional): Response format - `"json"` or `"llm"` (default: `"json"`)
+- `output_format` (str, optional): Response format - `"json"` or `"llm"` (default: `"json"`)
 - `timeout` (int, optional): Request timeout in seconds (default: 60, max: 120)
 
 **Returns:**
 
-- `dict`: Trending discussion clusters (when `format="json"`)
-- `str`: Formatted text response (when `format="llm"`)
+- `dict`: Trending discussion clusters (when `output_format="json"`)
+- `str`: Formatted text response (when `output_format="llm"`)
 
 ---
 
-### `cluster_info(label, limit=10, format="json", timeout=60)`
+### `cluster_info(label, limit=10, output_format="json", timeout=60)`
 
 Dive deeper into a specific trending discussion cluster. Useful for understanding the context and participants of a particular conversation.
 
@@ -195,17 +195,17 @@ Dive deeper into a specific trending discussion cluster. Useful for understandin
 
 - `label` (str): Cluster label obtained from `cluster_search`
 - `limit` (int, optional): Maximum number of results to return (default: 10)
-- `format` (str, optional): Response format - `"json"` or `"llm"` (default: `"json"`)
+- `output_format` (str, optional): Response format - `"json"` or `"llm"` (default: `"json"`)
 - `timeout` (int, optional): Request timeout in seconds (default: 60, max: 120)
 
 **Returns:**
 
-- `dict`: Detailed cluster information (when `format="json"`)
-- `str`: Formatted text response (when `format="llm"`)
+- `dict`: Detailed cluster information (when `output_format="json"`)
+- `str`: Formatted text response (when `output_format="llm"`)
 
 ---
 
-### `post_search(q, limit=10, format="json", timeout=60)`
+### `post_search(q, limit=10, output_format="json", timeout=60)`
 
 Search for raw social posts. Useful when you need to find specific posts (not recommended for finding trending discussions).
 
@@ -213,13 +213,13 @@ Search for raw social posts. Useful when you need to find specific posts (not re
 
 - `q` (str): Search query string
 - `limit` (int, optional): Maximum number of results to return (default: 10)
-- `format` (str, optional): Response format - `"json"` or `"llm"` (default: `"json"`)
+- `output_format` (str, optional): Response format - `"json"` or `"llm"` (default: `"json"`)
 - `timeout` (int, optional): Request timeout in seconds (default: 60, max: 120)
 
 **Returns:**
 
-- `dict`: Raw social posts (when `format="json"`)
-- `str`: Formatted text response (when `format="llm"`)
+- `dict`: Raw social posts (when `output_format="json"`)
+- `str`: Formatted text response (when `output_format="llm"`)
 
 ## Error Handling
 
