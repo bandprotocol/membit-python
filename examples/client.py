@@ -21,6 +21,8 @@ def print_section(title: str):
 def main():
     # Initialize client
     client = MembitClient()
+    # or
+    # client = MembitClient(api_key="your_api_key_here")
 
     print_section("Searching for Trending Clusters")
     clusters = client.cluster_search("artificial intelligence", limit=3)

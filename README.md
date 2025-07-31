@@ -19,21 +19,16 @@ uv add membit-python
 
 ## Quick Start
 
-### 1. Get Your API Key
-
-First, obtain your API key from Membit and set it as an environment variable:
-
-```bash
-export MEMBIT_API_KEY="your_api_key_here"
-```
-
-### 2. Basic Usage
+### Basic Usage
 
 ```python
 from membit import MembitClient
 
-# Initialize the client (uses MEMBIT_API_KEY environment variable)
-client = MembitClient()
+# Initialize the client with API key
+client = MembitClient(api_key="your_api_key_here")
+
+# Or use environment variable MEMBIT_API_KEY
+# client = MembitClient()
 
 # Search for trending discussion clusters
 clusters = client.cluster_search("artificial intelligence", limit=5)
@@ -69,7 +64,10 @@ Get data in JSON format for applications or LLM-optimized text for AI workflows.
 ```python
 from membit import MembitClient
 
+# Initialize client with API key
 client = MembitClient(api_key="your_api_key_here")
+# Or use environment variable MEMBIT_API_KEY
+# client = MembitClient()
 
 # Search for trending clusters
 clusters = client.cluster_search("artificial intelligence", limit=5)
@@ -84,7 +82,8 @@ for cluster in clusters.get("clusters", []):
 ```python
 from membit import MembitClient
 
-client = MembitClient()
+# Initialize client with API key
+client = MembitClient(api_key="your_api_key_here")
 
 # First, find clusters
 clusters = client.cluster_search("climate change")
@@ -101,7 +100,8 @@ if clusters.get("clusters"):
 ```python
 from membit import MembitClient
 
-client = MembitClient()
+# Initialize client with API key
+client = MembitClient(api_key="your_api_key_here")
 
 # Search for specific social posts
 posts = client.post_search("machine learning breakthrough", limit=20)
@@ -116,7 +116,8 @@ for post in posts.get("posts", []):
 ```python
 from membit import MembitClient
 
-client = MembitClient()
+# Initialize client with API key
+client = MembitClient(api_key="your_api_key_here")
 
 # Get JSON response (default)
 json_response = client.cluster_search("space exploration", output_format="json")
@@ -229,8 +230,9 @@ The client includes comprehensive error handling:
 from membit import MembitClient, MissingAPIKeyError
 
 try:
-    # This will raise MissingAPIKeyError if no API key is provided
-    client = MembitClient()
+    # Initialize client with API key
+    client = MembitClient(api_key="your_api_key_here")
+
     result = client.cluster_search("python programming")
 
 except MissingAPIKeyError:

@@ -19,7 +19,10 @@ def print_section(title: str):
 
 
 async def main():
+    # Initialize client
     client = AsyncMembitClient()
+    # or
+    # client = AsyncMembitClient(api_key="your_api_key_here")
 
     print_section("Searching for Trending Clusters (Async)")
     clusters = await client.cluster_search("artificial intelligence", limit=3)
